@@ -1,0 +1,254 @@
+package application;
+	
+//import javafx.application.Application;
+//import javafx.stage.Stage;
+//import javafx.scene.Scene;
+//import javafx.scene.layout.BorderPane;
+//
+//
+//public class Main extends Application {
+//	@Override
+//	public void start(Stage primaryStage) {
+//		try {
+//			BorderPane root = new BorderPane();
+//			Scene scene = new Scene(root,400,400);
+//			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+//			primaryStage.setScene(scene);
+//			primaryStage.show();
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
+//	
+//	public static void main(String[] args) {
+//		launch(args);
+//	}
+//}
+
+import javafx.application.Application;
+import javafx.stage.Stage;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.SingleSelectionModel;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
+
+public class Main extends Application {
+	
+	//Tab1 buttons
+	TextField txfId = new TextField();
+	Button btnAddBlob = new Button("Add Employee");
+	Button btnDeleteBlob = new Button("Delete Employee");
+	Button btnShowAll = new Button("Show All");
+	Button btnSave = new Button("Save");
+	
+	Button btnReset = new Button("Reset");	
+	TextArea txaResults = new TextArea();
+	TabPane tabPane = new TabPane();
+	SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
+	
+	//tab2 building buttons
+	TextField txfId2 = new TextField();
+	Button btnAddBlob2 = new Button("Add Building");
+	Button btnDeleteBlob2 = new Button("Delete Building");
+	Button btnShowAll2 = new Button("Show All");
+	Button btnSave2 = new Button("Save");
+	
+	Button btnReset2 = new Button("Reset");	
+	TextArea txaResults2 = new TextArea();
+	TabPane tabPane2 = new TabPane();
+	SingleSelectionModel<Tab> selectionModel2 = tabPane2.getSelectionModel();
+	
+	//tab3 buttons
+	TextField txfId3 = new TextField();
+	Button btnAddBlob3 = new Button("Add Employee");
+	Button btnShowAll3 = new Button("Show All");
+	Button btnSave3 = new Button("Save");
+	
+	Button btnReset3 = new Button("Reset");	
+	TextArea txaResults3 = new TextArea();
+	TabPane tabPane3 = new TabPane();
+	SingleSelectionModel<Tab> selectionModel3 = tabPane2.getSelectionModel();
+	
+	//EmployeeController EmployeeController;
+	
+	@Override
+	public void start(Stage primaryStage) {
+		try {
+			//EmployeeController = new BlobController(this);
+			
+			Pane root = buildGui();
+			Scene scene = new Scene(root,600,600);
+			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			primaryStage.setScene(scene);
+			primaryStage.setTitle(" Key Managment System");
+			primaryStage.show();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private Pane buildGui() {
+		Pane pan = buildTabPane();
+		return pan;
+		
+	}
+	
+	private Pane buildTabPane() {
+		BorderPane brdPane = new BorderPane();
+		tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+		
+		// Build Tab 1
+		Tab tab1 = new Tab();
+		tab1.setText("Employee");
+		tab1.setContent(buildTab1Content());
+
+//		// Build Tab 2
+		Tab tab2 = new Tab();
+		tab2.setText("Building");
+		tab2.setContent(buildTab2Content());
+		
+//		// Build Tab 3
+		Tab tab3 = new Tab();
+		tab3.setText("Reports");
+//		tab3.setContent(buildTab3Content());
+
+		// Add tabs to TabPane
+		tabPane.getTabs().addAll(tab1);
+		tabPane.getTabs().addAll(tab2);
+		tabPane.getTabs().addAll(tab3);
+		
+		// Add TabPane to BorderPane
+		brdPane.setCenter(tabPane);
+		return brdPane;
+	}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+	private Pane buildTab1Content() {
+		GridPane root = new GridPane();
+		root.getStyleClass().add("gridpane");
+		// Row 1
+		root.add(buildIdEntry(),0,0);
+		root.add(buildButtonsPane(),1,0);
+		// Row 2, spans both columns
+		root.add(txaResults, 0, 1);
+		GridPane.setColumnSpan(txaResults, 2);
+		return root;
+	}
+	
+	private Pane buildIdEntry() {
+		HBox outterBox = new HBox();
+		outterBox.getStyleClass().add("hbox");
+		
+		HBox row = new HBox();
+		row.getStyleClass().add("hbox2");
+		txfId.requestFocus();
+		row.getChildren().addAll(new Label("Id"), txfId);
+		
+		outterBox.getChildren().addAll(row);
+		return outterBox;
+	}
+
+	private Pane buildButtonsPane() {
+		HBox row = new HBox();
+		row.getStyleClass().add("hbox");
+		
+		// Set event handlers
+		btnAddBlob.setOnAction(new ProcessButtonEventHandler() );
+		
+		// Alternate approach, uses a lambda expression
+		//btnShowAll.setOnAction(e -> blobController.showAll() );
+		//btnSave.setOnAction(e -> blobController.save());
+		//btnReset.setOnAction(e -> blobController.reset() );
+		
+		// Add buttons to pane
+		row.getChildren().addAll(btnAddBlob, btnShowAll, btnSave, btnReset);
+		return row;
+	}
+	
+//////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private Pane buildTab2Content() {
+		GridPane root2 = new GridPane();
+		root2.getStyleClass().add("gridpane");
+		// Row 1
+		root2.add(buildIdEntry2(),0,0);
+		root2.add(buildButtonsPane2(),1,0);
+		// Row 2, spans both columns
+		root2.add(txaResults2, 0, 1);
+		GridPane.setColumnSpan(txaResults2, 2);
+		return root2;
+	}
+	private Pane buildIdEntry2() {
+		HBox outterBox = new HBox();
+		outterBox.getStyleClass().add("hbox");
+		
+		HBox row = new HBox();
+		row.getStyleClass().add("hbox2");
+		txfId2.requestFocus();
+		row.getChildren().addAll(new Label("Enter Id"), txfId2);
+		
+		outterBox.getChildren().addAll(row);
+		return outterBox;
+	}
+
+	private Pane buildButtonsPane2() {
+		HBox row2 = new HBox();
+		row2.getStyleClass().add("hbox2");
+		
+		// Set event handlers
+		// The way we did it in CS 1302
+//		btnAddBlob.setOnAction(new ProcessButtonEventHandler() );
+		
+		// Alternate approach, uses a lambda expression
+		//btnShowAll.setOnAction(e -> blobController.showAll() );
+		//btnSave.setOnAction(e -> blobController.save());
+		//btnReset.setOnAction(e -> blobController.reset() );
+		
+		// Add buttons to pane
+		row2.getChildren().addAll(btnAddBlob2, btnShowAll2, btnSave2, btnReset2);
+		return row2;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+//	//////////////////////////////////////////////////////////////////////////////////////////////////
+//	private Pane buildTab3Content() {
+//	GridPane root = new GridPane();
+//	root.getStyleClass().add("gridpane");
+//	Button btnSwitchTab = new Button("Return to Tab 1");
+//	//btnSwitchTab.setOnAction(new ProcessSwitchTabEventHandler());
+//	root.add(btnSwitchTab,0,0);
+//	return root;
+//}
+
+	// Event Handlers below
+	private class ProcessButtonEventHandler implements EventHandler<ActionEvent> {
+		@Override
+		public void handle(ActionEvent event) {
+			//String id = txfId.getText();
+			//blobController.addBlob(id);
+		}
+			
+	}
+
+	public static void main(String[] args) {
+		launch(args);
+	}
+}
+
+
+
